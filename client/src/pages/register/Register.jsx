@@ -6,11 +6,9 @@ const Register = () => {
     <div className="register">
       <div className="card">
         <div className="left">
-          <h1>Lama Social.</h1>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero cum,
-            alias totam numquam ipsa exercitationem dignissimos, error nam,
-            consequatur.
+        <p class="bold-text">Blogging Website for Diverse Voices</p>
+          <p class = "info">
+          Create an account to start sharing your thoughts, connect with a community of bloggers, and explore diverse perspectives. Sign up today and be part of a space where your voice matters!
           </p>
           <span>Do you have an account?</span>
           <Link to="/login">

@@ -1,3 +1,16 @@
+.bold-text {
+  font-size: 50px;
+  font-weight: bold;
+}
+
+.info{
+
+  font-size: 20px;
+  font-weight: bold;
+
+}
+
+
 .register {
   height: 100vh;
   background-color: rgb(193, 190, 255);
@@ -17,7 +30,7 @@
     .left {
       flex: 1;
       background: linear-gradient(rgba(39, 11, 96, 0.5), rgba(39, 11, 96, 0.5)),
-        url("https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600")
+        url("https://media.istockphoto.com/id/1440896450/vector/blogging-round-bright-illustration.jpg?s=612x612&w=0&k=20&c=07ztCRyZQpMBN-Zwsj6XciovT13EDjvVKS_qY9vhrj8=")
           center;
       background-size: cover;
       padding: 50px;
@@ -25,7 +38,6 @@
       flex-direction: column;
       gap: 30px;
       color: white;
-
       h1 {
         font-size: 100px;
         line-height: 100px;

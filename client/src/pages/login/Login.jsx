@@ -14,11 +14,9 @@ const Login = () => {
     <div className="login">
       <div className="card">
         <div className="left">
-          <h1>Hello World.</h1>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero cum,
-            alias totam numquam ipsa exercitationem dignissimos, error nam,
-            consequatur.
+        <p class="bold-text">Blogging Website for Diverse Voices</p>
+        <p class="info">
+          Sign up to share your voice, connect with others, and join a community of diverse bloggers. Start your journey today!
           </p>
           <span>Don't you have an account?</span>
           <Link to="/register">
