@@ -6,7 +6,7 @@ const Posts = () => {
   const posts = [
     {
       id: 1,
-      name: "John Doe",
+      name: "Saida",
       userId: 1,
       profilePic:
         "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600",
@@ -15,7 +15,7 @@ const Posts = () => {
     },
     {
       id: 2,
-      name: "Jane Doe",
+      name: "Sabira",
       userId: 2,
       profilePic:
         "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600",

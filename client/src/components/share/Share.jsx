@@ -1,7 +1,7 @@
 import "./share.scss";
 import Image from "../../assets/img.png";
-import Map from "../../assets/map.png";
-import Friend from "../../assets/friend.png";
+// import Map from "../../assets/map.png";
+// import Friend from "../../assets/friend.png";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
 
@@ -28,14 +28,14 @@ const Share = () => {
                 <span>Add Image</span>
               </div>
             </label>
-            <div className="item">
+            {/* <div className="item">
               <img src={Map} alt="" />
               <span>Add Place</span>
-            </div>
-            <div className="item">
+            </div> */}
+            {/* <div className="item">
               <img src={Friend} alt="" />
               <span>Tag Friends</span>
-            </div>
+            </div> */}
           </div>
           <div className="right">
             <button>Share</button>
