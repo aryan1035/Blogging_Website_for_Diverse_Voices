@@ -45,7 +45,7 @@ const Profile = () => {
             </a>
           </div>
           <div className="center">
-            <span>Jane Doe</span>
+            <span>Aryan</span>
             <div className="info">
               <div className="item">
                 <PlaceIcon />
