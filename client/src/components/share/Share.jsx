@@ -1,7 +1,5 @@
 import "./share.scss";
 import Image from "../../assets/img.png";
-// import Map from "../../assets/map.png";
-// import Friend from "../../assets/friend.png";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
 
@@ -13,10 +11,10 @@ const Share = () => {
       <div className="container">
         <div className="top">
           <img
-            src={currentUser.profilePic}
+            src="https://imageio.forbes.com/specials-images/imageserve/6545fb35ee5295c6716803b2/FC-Barcelona-will-probably-never-see-Lionel-Messi-wear-their-colours-again-/960x0.jpg?format=jpg&width=960"
             alt=""
           />
-          <input type="text" placeholder={`What's on your mind ${currentUser.name}?`} />
+          <input type="text" placeholder={`What's on your mind,feel free to share.`} />
         </div>
         <hr />
         <div className="bottom">
@@ -28,14 +26,8 @@ const Share = () => {
                 <span>Add Image</span>
               </div>
             </label>
-            {/* <div className="item">
-              <img src={Map} alt="" />
-              <span>Add Place</span>
-            </div> */}
-            {/* <div className="item">
-              <img src={Friend} alt="" />
-              <span>Tag Friends</span>
-            </div> */}
+            {}
+            {}
           </div>
           <div className="right">
             <button>Share</button>

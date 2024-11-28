@@ -10,8 +10,6 @@ import { useState } from "react";
 
 const Post = ({ post }) => {
   const [commentOpen, setCommentOpen] = useState(false);
-
-  //TEMPORARY
   const liked = false;
 
   return (
@@ -39,16 +37,13 @@ const Post = ({ post }) => {
         <div className="info">
           <div className="item">
             {liked ? <FavoriteOutlinedIcon /> : <FavoriteBorderOutlinedIcon />}
-            12 Likes
+             Likes
           </div>
           <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
             <TextsmsOutlinedIcon />
-            12 Comments
+             Comments
           </div>
-          <div className="item">
-            <ShareOutlinedIcon />
-            Share
-          </div>
+          {}
         </div>
         {commentOpen && <Comments />}
       </div>

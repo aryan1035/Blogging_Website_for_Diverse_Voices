@@ -2,25 +2,20 @@ import Post from "../post/Post";
 import "./posts.scss";
 
 const Posts = () => {
-  //TEMPORARY
   const posts = [
     {
       id: 1,
-      name: "Saida",
+      name: "Aryan",
       userId: 1,
       profilePic:
-        "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600",
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
-      img: "https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600",
+        "https://imageio.forbes.com/specials-images/imageserve/6545fb35ee5295c6716803b2/FC-Barcelona-will-probably-never-see-Lionel-Messi-wear-their-colours-again-/960x0.jpg?format=jpg&width=960",
+      desc: "Football is more than just a sport; it is a universal passion. Loved by billions, it unites people across cultures and brings unmatched excitement. Simple yet deeply strategic, it is a game where a single goal can create history.From iconic rivalries to grassroots initiatives, football inspires pride, identity, and even social change. It is a shared language that connects the world, reminding us of the joy found in unity and competition.Whether played on local fields or celebrated in grand stadiums, football truly lives up to its name as the beautiful game.",
+      
+      
+      img :"https://cdn.britannica.com/51/190751-050-147B93F7/soccer-ball-goal.jpg",
+   
     },
-    {
-      id: 2,
-      name: "Sabira",
-      userId: 2,
-      profilePic:
-        "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600",
-      desc: "Tenetur iste voluptates dolorem rem commodi voluptate pariatur, voluptatum, laboriosam consequatur enim nostrum cumque! Maiores a nam non adipisci minima modi tempore.",
-    },
+    
   ];
 
   return <div className="posts">

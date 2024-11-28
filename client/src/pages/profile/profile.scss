@@ -18,7 +18,7 @@
       .profilePic {
         width: 200px;
         height: 200px;
-        border-radius: 50%;
+        // border-radius: 50%;
         object-fit: cover;
         position: absolute;
         left: 0;
@@ -28,7 +28,7 @@
       }
     }
     .profileContainer {
-      padding: 20px 70px;
+      padding: 50px 50px;
 
       @include mobile{
         padding: 10px;
