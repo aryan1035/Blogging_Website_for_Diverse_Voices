@@ -1,20 +1,25 @@
 import "./navbar.scss";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
-import GridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
-import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
-import { DarkModeContext } from "../../context/darkModeContext";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../context/authContext";
+import { useNavigate } from "react-router-dom";
+import { makeRequest } from "../../axios";
 
-const Navbar = () => {
-  const { toggle, darkMode } = useContext(DarkModeContext);
+const Navbar = ({isLoggedIn, setIsLoggedIn}) => {
   const { currentUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    try {
+      await makeRequest.post("/auth/logout"); // Ensure you have a logout route
+      setIsLoggedIn(false);
+      navigate("/login");
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
+  };
+  const handleProfileClick = () => {
+    navigate(`/profile/${currentUser.id}`);
+  };
 
   return (
     <div className="navbar">
@@ -22,25 +27,16 @@ const Navbar = () => {
         <Link to="/" style={{ textDecoration: "none" }}>
           <span>Blogging Website for Diverse Voices</span>
         </Link>
-        <HomeOutlinedIcon />
-        {darkMode ? (
-          <WbSunnyOutlinedIcon onClick={toggle} />
-        ) : (
-          <DarkModeOutlinedIcon onClick={toggle} />
-        )}
-        <GridViewOutlinedIcon />
-        <div className="search">
-          <SearchOutlinedIcon />
-          <input type="text" placeholder="Search..." />
-        </div>
       </div>
       <div className="right">
-        <PersonOutlinedIcon />
-        <EmailOutlinedIcon />
-        <NotificationsOutlinedIcon />
         <div className="user">
-          {}
+          <img src={currentUser.profilePic} alt="" />
+          <button onClick={handleProfileClick} >
+          <span>{currentUser.name}</span>
+          </button>
+
         </div>
+        <button onClick={handleLogout}>LogOut</button>
       </div>
     </div>
   );

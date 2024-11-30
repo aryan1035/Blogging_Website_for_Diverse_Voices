@@ -1,37 +1,57 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import "./comments.scss";
 import { AuthContext } from "../../context/authContext";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { makeRequest } from "../../axios";
+import moment from "moment";
 
-const Comments = () => {
-  const { currentUser } = useContext(AuthContext);
-  const comments = [
+const Comments = ({ postId }) => {
+  const [desc, setDesc] = useState(""); // State for the comment input
+  const { currentUser } = useContext(AuthContext); // Get current user
+
+  const { isLoading, error, data } = useQuery(["comments"], () =>
+    makeRequest.get("/comments?postId=" + postId).then((res) => res.data)
+  ); // Fetch comments
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(
+    (newComment) => makeRequest.post("/comments", newComment),
     {
-      id: 1,
-      desc: "Very informative",
-      name: "Yousha",
-      userId: 1,
-      profilePicture:
-        "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-  
-  ];
+      onSuccess: () => queryClient.invalidateQueries(["comments"]), // Refresh comments
+    }
+  );
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    mutation.mutate({ desc, postId });
+    setDesc("");
+  };
+
   return (
     <div className="comments">
       <div className="write">
-        {}
-        <input type="text" placeholder="write a comment" />
-        <button>Send</button>
+        <img src={currentUser.profilePic} alt="" />
+        <input
+          type="text"
+          placeholder="write a comment"
+          value={desc}
+          onChange={(e) => setDesc(e.target.value)}
+        />
+        <button onClick={handleClick}>Send</button>
       </div>
-      {comments.map((comment) => (
-        <div className="comment">
-          <img src={comment.profilePicture} alt="" />
-          <div className="info">
-            <span>{comment.name}</span>
-            <p>{comment.desc}</p>
-          </div>
-          <span className="date">1 hour ago</span>
-        </div>
-      ))}
+      {isLoading
+        ? "loading"
+        : data.map((comment) => (
+            <div className="comment">
+              <img src={comment.profilePic} alt="" />
+              <div className="info">
+                <span>{comment.name}</span>
+                <p>{comment.desc}</p>
+              </div>
+              <span className="date">{moment(comment.createdAt).fromNow()}</span>
+            </div>
+          ))}
     </div>
   );
 };
