@@ -41,7 +41,7 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
+app.use("/api/users", userRoutes); // Include the users route
 app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes); // Updated route includes delete functionality
 app.use("/api/likes", likeRoutes);

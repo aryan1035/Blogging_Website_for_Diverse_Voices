@@ -41,3 +41,20 @@ export const updateUser = (req, res) => {
     );
   });
 };
+
+// Search users by name
+export const searchUsers = (req, res) => {
+  const { name } = req.query; // Get search query from URL parameter
+  if (!name) {
+    return res.status(400).json("Name query is required");
+  }
+
+  const q = "SELECT * FROM users WHERE name LIKE ?"; // Query to search users by name
+  const searchQuery = `%${name}%`; // Use wildcards for partial matching
+
+  db.query(q, [searchQuery], (err, data) => {
+    if (err) return res.status(500).json(err); // Handle database errors
+    const users = data.map(({ password, ...user }) => user); // Exclude password from results
+    return res.json(users); // Send list of matching users
+  });
+};

@@ -6,28 +6,35 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Posts from "../../components/posts/Posts";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
-import { useLocation } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useParams } from "react-router-dom";
+import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../context/authContext";
 import Update from "../../components/update/Update";
 
 const Profile = () => {
   const [openUpdate, setOpenUpdate] = useState(false);
   const { currentUser } = useContext(AuthContext);
-  const userId = parseInt(useLocation().pathname.split("/")[2]);
 
-  const { isLoading, error, data } = useQuery(["user"], () =>
-    makeRequest.get("/users/find/" + userId).then((res) => res.data)
+  // Use useParams instead of useLocation for cleaner parameter handling
+  const { id } = useParams();
+  const userId = parseInt(id);
+
+  const queryClient = useQueryClient();
+
+  // Fetch user data
+  const { isLoading, error, data, refetch } = useQuery(
+    ["user", userId], // Add userId to the query key
+    () => makeRequest.get("/users/find/" + userId).then((res) => res.data)
   );
 
+  // Fetch relationship data
   const { isLoading: rIsLoading, data: relationshipData } = useQuery(
-    ["relationship"],
+    ["relationship", userId], // Add userId to the query key
     () =>
       makeRequest.get("/relationships?followedUserId=" + userId).then((res) => res.data)
   );
 
-  const queryClient = useQueryClient();
-
+  // Mutation for follow/unfollow actions
   const mutation = useMutation(
     (following) => {
       if (following)
@@ -36,26 +43,31 @@ const Profile = () => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["relationship"]);
+        queryClient.invalidateQueries(["relationship", userId]);
       },
     }
   );
 
+  // Handle follow/unfollow action
   const handleFollow = () => {
     mutation.mutate(relationshipData.includes(currentUser.id));
   };
 
+  // Refetch data when the userId parameter changes
+  useEffect(() => {
+    refetch(); // Manually trigger a refetch for user data
+  }, [userId, refetch]);
+
   return (
     <div className="profile">
       {isLoading ? (
-        "loading"
+        "Loading..."
       ) : (
         <>
           <div className="images">
-            {/* Updated image path */}
             <img
-              src={"/upload/" + data.profilePic}
-              alt=""
+              src={data?.profilePic ? "/upload/" + data.profilePic : "/default-profile-pic.jpg"}
+              alt={data?.name}
               className="profilePic"
             />
           </div>
@@ -67,17 +79,25 @@ const Profile = () => {
                 <div className="info">
                   <div className="item">
                     <PlaceIcon />
-                    <span>{data?.city}</span>
+                    <span>{data?.city || "N/A"}</span>
                   </div>
                   <div className="item">
                     <LanguageIcon />
-                    <span>{data?.website}</span>
+                    <span>
+                      {data?.website ? (
+                        <a href={data.website} target="_blank" rel="noopener noreferrer">
+                          {data.website}
+                        </a>
+                      ) : (
+                        "N/A"
+                      )}
+                    </span>
                   </div>
                 </div>
                 {rIsLoading ? (
-                  "loading "
+                  "Loading..."
                 ) : userId === currentUser.id ? (
-                  <button onClick={() => setOpenUpdate(true)}>update</button>
+                  <button onClick={() => setOpenUpdate(true)}>Update</button>
                 ) : (
                   <button onClick={handleFollow}>
                     {relationshipData.includes(currentUser.id)
