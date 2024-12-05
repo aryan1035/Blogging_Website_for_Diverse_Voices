@@ -51,7 +51,11 @@ const Share = () => {
       <div className="container">
         <div className="top">
           <div className="left">
-            <img src={currentUser.profilePic} alt="" /> {/* Display current user's profile picture */}
+            {/* Check if profilePic exists, else use a default profile picture */}
+            <img
+              src={currentUser.profilePic ? `/upload/${currentUser.profilePic}` : "/default-profile.jpg"}
+              alt="Profile"
+            />
             <input
               type="text"
               placeholder={`What's on your mind ${currentUser.name}?`} // Input placeholder with user name

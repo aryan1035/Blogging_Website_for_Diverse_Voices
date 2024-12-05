@@ -1,57 +1,120 @@
-import { useContext, useState } from "react";
 import "./comments.scss";
-import { AuthContext } from "../../context/authContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { makeRequest } from "../../axios";
-import moment from "moment";
+import { useContext } from "react";
+import { AuthContext } from "../../context/authContext";
+import Replies from "../replies/Replies"; // Import Replies component
 
 const Comments = ({ postId }) => {
-  const [desc, setDesc] = useState(""); // State for the comment input
-  const { currentUser } = useContext(AuthContext); // Get current user
-
-  const { isLoading, error, data } = useQuery(["comments"], () =>
-    makeRequest.get("/comments?postId=" + postId).then((res) => res.data)
-  ); // Fetch comments
-
   const queryClient = useQueryClient();
+  const [replyOpen, setReplyOpen] = useState({}); // To toggle replies visibility for specific comments
 
-  const mutation = useMutation(
+  const { currentUser } = useContext(AuthContext);
+
+  // Fetch comments for the post
+  const { isLoading, error, data } = useQuery(["comments", postId], () =>
+    makeRequest.get("/comments?postId=" + postId).then((res) => res.data)
+  );
+
+  // Mutation for adding a comment
+  const commentMutation = useMutation(
     (newComment) => makeRequest.post("/comments", newComment),
     {
-      onSuccess: () => queryClient.invalidateQueries(["comments"]), // Refresh comments
+      onSuccess: () => {
+        queryClient.invalidateQueries(["comments", postId]);
+      },
     }
   );
 
-  const handleClick = async (e) => {
+  // Mutation for deleting a comment
+  const deleteCommentMutation = useMutation(
+    (commentId) => makeRequest.delete(`/comments/${commentId}`),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["comments", postId]);
+      },
+    }
+  );
+
+  // Mutation for adding a reply
+  const replyMutation = useMutation(
+    (newReply) => makeRequest.post("/replies", newReply),
+    {
+      onSuccess: (_, variables) => {
+        queryClient.invalidateQueries(["replies", variables.commentId]);
+      },
+    }
+  );
+
+  const handleCommentSubmit = (e) => {
     e.preventDefault();
-    mutation.mutate({ desc, postId });
-    setDesc("");
+    const commentText = e.target[0].value;
+    if (commentText.trim()) {
+      commentMutation.mutate({ desc: commentText, postId });
+      e.target[0].value = "";
+    }
   };
+
+  const handleReplySubmit = (e, commentId) => {
+    e.preventDefault();
+    const replyText = e.target[0].value;
+    if (replyText.trim()) {
+      replyMutation.mutate({ desc: replyText, commentId });
+      e.target[0].value = "";
+    }
+  };
+
+  const toggleReplies = (commentId) => {
+    setReplyOpen((prev) => ({ ...prev, [commentId]: !prev[commentId] }));
+  };
+
+  const handleDeleteComment = (commentId) => {
+    deleteCommentMutation.mutate(commentId);
+  };
+
+  if (isLoading) return <div>Loading comments...</div>;
+  if (error) return <div>Something went wrong!</div>;
 
   return (
     <div className="comments">
-      <div className="write">
-        <img src={currentUser.profilePic} alt="" />
-        <input
-          type="text"
-          placeholder="write a comment"
-          value={desc}
-          onChange={(e) => setDesc(e.target.value)}
-        />
-        <button onClick={handleClick}>Send</button>
-      </div>
-      {isLoading
-        ? "loading"
-        : data.map((comment) => (
-            <div className="comment">
-              <img src={comment.profilePic} alt="" />
-              <div className="info">
-                <span>{comment.name}</span>
-                <p>{comment.desc}</p>
-              </div>
-              <span className="date">{moment(comment.createdAt).fromNow()}</span>
+      <form onSubmit={handleCommentSubmit}>
+        <input type="text" placeholder="Write a comment..." />
+        <button type="submit">Send</button>
+      </form>
+      {data.map((comment) => (
+        <div className="comment" key={comment.id}>
+          <div className="info">
+            {/* Fix: Check if the profilePic exists, else use default image */}
+            <img
+              src={comment.profilePic ? `/upload/${comment.profilePic}` : "/default-profile.jpg"}
+              alt="Profile"
+            />
+            <div className="details">
+              <span className="name">{comment.name}</span>
+              <p>{comment.desc}</p>
             </div>
-          ))}
+          </div>
+          <span className="date">{comment.createdAt}</span>
+          {comment.userId === currentUser.id && (
+            <button onClick={() => handleDeleteComment(comment.id)}>
+              Delete
+            </button>
+          )}
+          <button onClick={() => toggleReplies(comment.id)}>
+            {replyOpen[comment.id] ? "Hide Replies" : "Show Replies"}
+          </button>
+          {replyOpen[comment.id] && (
+            <>
+              <Replies commentId={comment.id} />
+              <form onSubmit={(e) => handleReplySubmit(e, comment.id)}>
+                <input type="text" placeholder="Write a reply..." />
+                <button type="submit">Send</button>
+              </form>
+            </>
+          )}
+        </div>
+      ))}
     </div>
   );
 };
