@@ -1,77 +1,105 @@
 import "./update.scss";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { makeRequest } from "../../axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const Update = ({ setOpenUpdate, user }) => {
-  // State for storing the new profile picture and text inputs (name, city, website)
   const [profile, setProfile] = useState(null);
   const [texts, setTexts] = useState({
-    name: "",
-    city: "",
-    website: "",
+    name: user.name || "",
+    city: user.city || "",
+    website: user.website || "",
   });
 
-  // Function to upload a file (used for uploading profile picture)
+  // Function to upload the file to the server
   const upload = async (file) => {
-    console.log(file);
     try {
       const formData = new FormData();
-      formData.append("file", file); // Append file to form data
-      const res = await makeRequest.post("/upload", formData); // POST request to upload the file
-      return res.data; // Return the response data (image URL)
+      formData.append("file", file);
+      const res = await makeRequest.post("/upload", formData);
+      return res.data;  // Return the uploaded file URL
     } catch (err) {
-      console.log(err); // Log any error that occurs during file upload
+      console.log(err);
     }
   };
 
-  // Handle changes in text input fields (name, city, website)
+  // Handle input field changes
   const handleChange = (e) => {
     setTexts((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // React Query client instance to invalidate and refetch data
+  // Initialize the queryClient for cache invalidation
   const queryClient = useQueryClient();
 
-  // Mutation to update user data (name, city, website, profilePic)
+  // Mutation hook to handle the user update
   const mutation = useMutation(
-    (user) => {
-      return makeRequest.put("/users", user); // PUT request to update user information
+    (userData) => {
+      return makeRequest.put("/users", userData);  // API call to update the user
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["user"]); // Invalidate and refetch user data on success
+        // Invalidate the cache for user data and trigger a refetch
+        queryClient.invalidateQueries(["user"]);
       },
     }
   );
 
-  // Handle the click event to update the user information
+  // Handle form submission and update the user
   const handleClick = async (e) => {
-  e.preventDefault(); // Prevent the default form submission
+    e.preventDefault();
 
-   let profileUrl = user.profilePic; // Default to the current user's profile picture
-    // If a new profile picture is selected, upload it and get the new URL
-   profileUrl = profile ? await upload(profile) : user.profilePic;
+    let profileUrl = user.profilePic;
+    profileUrl = profile ? await upload(profile) : user.profilePic;  // Update profile picture if a new one is selected
 
-    // Call the mutation to update the user data (with new texts and profile picture)
-   mutation.mutate({ ...texts, profilePic: profileUrl });
-
-    // Close the update modal after successful update
-    setOpenUpdate(false);
+    // Call the mutation to update the user data
+    mutation.mutate({ ...texts, profilePic: profileUrl });
+    setOpenUpdate(false);  // Close the update form after submission
   };
+
+  // Effect to set the initial form values based on the `user` prop
+  useEffect(() => {
+    setTexts({
+      name: user.name || "",
+      city: user.city || "",
+      website: user.website || "",
+    });
+  }, [user]); // Trigger the effect when the `user` prop changes
 
   return (
     <div className="update">
-      Update
+      <h2>Update Profile</h2>
       <form>
-        <input type="file" onChange={(e) => setProfile(e.target.files[0])} />
-        <input type="text" name="name" onChange={handleChange} />
-        <input type="text" name="city" onChange={handleChange} />
-        <input type="text" name="website" onChange={handleChange} />
-
+        {/* Profile image upload */}
+        <input
+          type="file"
+          onChange={(e) => setProfile(e.target.files[0])} // Set the profile image
+        />
+        {/* Name input field */}
+        <input
+          type="text"
+          name="name"
+          value={texts.name}  // Set the value to the current state
+          onChange={handleChange}  // Update the state on input change
+        />
+        {/* City input field */}
+        <input
+          type="text"
+          name="city"
+          value={texts.city}  // Set the value to the current state
+          onChange={handleChange}  // Update the state on input change
+        />
+        {/* Website input field */}
+        <input
+          type="text"
+          name="website"
+          value={texts.website}  // Set the value to the current state
+          onChange={handleChange}  // Update the state on input change
+        />
+        {/* Update button */}
         <button onClick={handleClick}>Update</button>
       </form>
-      <button onClick={() => setOpenUpdate(false)}> X </button>
+      {/* Close button */}
+      <button onClick={() => setOpenUpdate(false)} className="close">Close</button>
     </div>
   );
 };

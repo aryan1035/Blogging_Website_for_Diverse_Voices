@@ -16,7 +16,8 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-
+        position: relative; /* Needed for positioning the menu button */
+        
         .userInfo {
           display: flex;
           gap: 20px;
@@ -41,16 +42,48 @@
             }
           }
         }
+
+        .menu {
+          position: absolute;
+          top: 40px;
+          right: 0;
+          background-color: white;
+          border-radius: 10px;
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+          overflow: hidden;
+          
+          .delete-button {
+            padding: 10px 15px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 14px;
+            transition: background-color 0.3s;
+
+            &:hover {
+              background-color: #e53935;
+            }
+          }
+        }
       }
 
       .content {
-        margin: 20px 0px;
+        margin: 20px 0;
+
+        p {
+          margin: 10px 0;
+        }
 
         img {
-          width: 100%;
+          display: block;
+          margin: 20px auto;
+          max-width: 100%;
           max-height: 500px;
-          object-fit: cover;
-          margin-top: 20px;
+          object-fit: contain;
         }
       }
 

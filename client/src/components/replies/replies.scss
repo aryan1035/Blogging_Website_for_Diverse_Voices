@@ -1,84 +1,91 @@
 .replies {
-    .write {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-  
-      img {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        margin-right: 10px;
-      }
-  
-      input {
-        flex: 1;
-        border: none;
-        outline: none;
-        padding: 10px;
-        border-radius: 20px;
-        background-color: #f0f2f5;
-      }
-  
-      button {
-        margin-left: 10px;
-        padding: 8px 12px;
-        background-color: #1877f2;
-        color: white;
-        border: none;
-        border-radius: 20px;
-        cursor: pointer;
-  
-        &:hover {
-          background-color: #145dbf;
-        }
-      }
+  .write {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
     }
-  
-    .reply {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-  
-      img {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        margin-right: 10px;
-      }
-  
-      .info {
-        display: flex;
-        flex-direction: column;
-  
-        span {
-          font-weight: bold;
-          margin-bottom: 5px;
-        }
-  
-        p {
-          margin: 0;
-          color: #555;
-        }
-      }
-  
-      .date {
-        margin-left: auto;
-        font-size: 12px;
-        color: #888;
-      }
-  
-      .delete-button {
-        margin-left: 10px;
-        border: none;
-        background: none;
-        color: red;
-        cursor: pointer;
-  
-        &:hover {
-          text-decoration: underline;
-        }
+
+    input {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 10px;
+      border-radius: 20px;
+      background-color: #f0f2f5;
+    }
+
+    button {
+      margin-left: 10px;
+      padding: 8px 12px;
+      background-color: #1877f2;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #145dbf;
       }
     }
   }
-  
+
+  .reply {
+    display: flex;
+    flex-direction: column;  // Align the reply content in column for clarity
+    align-items: flex-start;  // Align the entire reply to the left
+    margin-bottom: 20px;
+    padding-left: 10px; // Optional: Adds some padding to the left to make it more visually clear
+
+    img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin-right: 10px;
+      margin-bottom: 10px;  // Spacing between the image and the text
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;  // Ensure name and text are aligned to the left
+      max-width: 90%;  // To ensure content doesn’t overflow to the right
+      word-wrap: break-word;
+
+      span {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      p {
+        margin: 0;
+        color: #555;
+      }
+    }
+
+    .date {
+      font-size: 12px;
+      color: #888;
+      align-self: flex-start;  // Keep the date aligned to the left
+    }
+
+    .delete-button {
+      margin-left: 10px;
+      border: none;
+      background-color: red;  // Red background color
+      color: white;  // White text color
+      cursor: pointer;
+      padding: 5px 10px;  // Adjust padding for better appearance
+      border-radius: 10px;  // Rounded corners for the button
+
+      &:hover {
+        background-color: darkred;  // Darker red on hover
+      }
+    }
+  }
+}

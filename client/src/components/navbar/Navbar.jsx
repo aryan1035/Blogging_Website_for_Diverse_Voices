@@ -74,7 +74,7 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
     return () => {
       document.removeEventListener("click", handleOutsideClick);
     };
-  }, []);
+  });
 
   return (
     <div className={`navbar ${darkMode ? "dark" : ""}`}>
@@ -83,9 +83,9 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
           <span>Blogging Website for Diverse Voices</span>
         </Link>
         {darkMode ? (
-          <WbSunnyOutlinedIcon onClick={toggle} />
+          <WbSunnyOutlinedIcon onClick={toggle} className="theme-toggle" />
         ) : (
-          <DarkModeOutlinedIcon onClick={toggle} />
+          <DarkModeOutlinedIcon onClick={toggle} className="theme-toggle" />
         )}
 
         <div className="search">
@@ -111,7 +111,7 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
                   <img
                     src={
                       user.profilePic
-                        ? `/upload/${user.profilePic}`
+                        ? `/upload/${user.profilePic}?t=${new Date().getTime()}` // Adding a timestamp to prevent caching
                         : "/default-profile-pic.jpg"
                     }
                     alt={user.name}
@@ -130,16 +130,18 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
           <img
             src={
               currentUser.profilePic
-                ? `/upload/${currentUser.profilePic}`
+                ? `/upload/${currentUser.profilePic}?t=${new Date().getTime()}` // Adding a timestamp to prevent caching
                 : "/default-profile-pic.jpg"
             }
             alt="Profile"
           />
-          <button onClick={handleProfileClick}>
+          <button onClick={handleProfileClick} className="profile">
             <span>{currentUser.name}</span>
           </button>
         </div>
-        <button onClick={handleLogout}>LogOut</button>
+        <button onClick={handleLogout} className="logout-button">
+          LogOut
+        </button>
       </div>
     </div>
   );

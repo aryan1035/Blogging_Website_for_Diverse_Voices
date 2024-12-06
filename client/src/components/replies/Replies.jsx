@@ -49,7 +49,7 @@ const Replies = ({ commentId }) => {
           </div>
           <span className="date">{reply.createdAt}</span>
           {reply.userId === currentUser.id && (
-            <button onClick={() => handleDeleteReply(reply.replyid)}>
+            <button className="delete-button" onClick={() => handleDeleteReply(reply.replyid)}>
               Delete
             </button>
           )}

@@ -58,20 +58,25 @@ const Post = ({ post }) => {
       <div className="container">
         <div className="user">
           <div className="userInfo">
-            {/* Display the profile picture and name */}
-            <img src={post.profilePic ? `/upload/${post.profilePic}` : "/default-profile.jpg"} alt="User" />
+            <img
+              src={post.profilePic ? `/upload/${post.profilePic}` : "/default-profile.jpg"}
+              alt="User"
+            />
             <div className="details">
-              <Link
-                to={`/profile/${post.userId}`}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
+              <Link to={`/profile/${post.userId}`} style={{ textDecoration: "none", color: "inherit" }}>
                 <span className="name">{post.name}</span>
               </Link>
               <span className="date">{moment(post.createdAt).fromNow()}</span>
             </div>
           </div>
           <MoreHorizIcon onClick={() => setMenuOpen(!menuOpen)} />
-          {menuOpen && <button onClick={handleDelete}>delete</button>}
+          {menuOpen && (
+            <div className="menu">
+              <button className="delete-button" onClick={handleDelete}>
+                Delete Post
+              </button>
+            </div>
+          )}
         </div>
         <div className="content">
           <p>{post.desc}</p>
@@ -94,7 +99,6 @@ const Post = ({ post }) => {
           </div>
         </div>
 
-        {/* Comments Section - Show replies */}
         {commentOpen && <Comments postId={post.id} />}
       </div>
     </div>

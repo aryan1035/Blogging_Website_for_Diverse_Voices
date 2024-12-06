@@ -30,22 +30,31 @@
         align-items: center;
         gap: 10px;
         border: 1px solid themed("border");
-        border-radius: 5px;
-        padding: 5px;
+        border-radius: 25px; /* Rounded corners for a sleek look */
+        padding: 8px 15px; /* Increased padding for better spacing */
         position: relative;
-
+        width: 300px; /* Ensure a fixed width for the search bar */
+        background-color: themed("inputBg"); /* Optional: background color for search bar */
+        
         input {
           border: none;
-          width: 500px;
+          outline: none; /* Remove outline on focus */
+          width: 100%; /* Make input take up available width */
           background-color: transparent;
           color: themed("textColor");
+          font-size: 14px; /* Adjust font size for readability */
+          padding: 5px 10px; /* Padding to align text nicely */
+          
+          &::placeholder {
+            color: themed("placeholderColor"); /* Optional: Set a placeholder color */
+          }
 
           @include mobile {
-            display: none;
+            width: 200px; /* Adjust width on mobile */
           }
 
           @include tablet {
-            width: 200px;
+            width: 250px; /* Adjust width on tablet */
           }
         }
 
@@ -60,6 +69,7 @@
           max-height: 200px;
           overflow-y: auto;
           z-index: 10;
+          width: 100%; /* Ensure results align with the search input width */
         }
 
         .search-result {
@@ -68,9 +78,10 @@
           padding: 10px;
           cursor: pointer;
           border-bottom: 1px solid themed("border");
+          transition: background-color 0.3s;
 
           &:hover {
-            background-color: #f1f1f1;
+            background-color: themed("highlight"); /* Highlight results on hover */
           }
 
           img {
@@ -79,6 +90,10 @@
             border-radius: 50%;
             object-fit: cover;
             margin-right: 10px;
+          }
+
+          span {
+            font-size: 14px; /* Slightly smaller font size for the search result names */
           }
         }
       }
@@ -111,6 +126,58 @@
         }
 
         span {
+          font-weight: bold;
+          font-size: 16px;
+          color: themed("textColor");
+          margin-right: 10px;
+        }
+      }
+
+      /* Log-out button styling */
+      .logout-button {
+        padding: 5px 10px;
+        background-color: red;
+        color: themed("buttonText") or #ffffff;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background-color: darken(red, 10%);
+        }
+
+        &:active {
+          transform: scale(0.95);
+        }
+      }
+
+      .profile {
+        padding: 5px 10px;
+        background-color: rgb(0, 191, 255);
+        color: themed("buttonText") or #ffffff;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background-color: darken(rgb(49, 211, 100), 10%);
+        }
+
+        &:active {
+          transform: scale(0.95);
+        }
+      }
+
+      .theme-toggle {
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          color: themed("highlight");
         }
       }
     }

@@ -96,14 +96,19 @@ const Comments = ({ postId }) => {
             </div>
           </div>
           <span className="date">{comment.createdAt}</span>
-          {comment.userId === currentUser.id && (
-            <button onClick={() => handleDeleteComment(comment.id)}>
-              Delete
+          <div className="buttons">
+            {comment.userId === currentUser.id && (
+              <button onClick={() => handleDeleteComment(comment.id)} className="deleteButton">
+                Delete
+              </button>
+            )}
+            <button
+              className="showRepliesButton"
+              onClick={() => toggleReplies(comment.id)}
+            >
+              {replyOpen[comment.id] ? "Hide Replies" : "Show Replies"}
             </button>
-          )}
-          <button onClick={() => toggleReplies(comment.id)}>
-            {replyOpen[comment.id] ? "Hide Replies" : "Show Replies"}
-          </button>
+          </div>
           {replyOpen[comment.id] && (
             <>
               <Replies commentId={comment.id} />
