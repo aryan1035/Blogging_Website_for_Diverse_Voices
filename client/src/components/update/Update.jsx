@@ -34,7 +34,7 @@ const Update = ({ setOpenUpdate, user }) => {
   // Mutation hook to handle the user update
   const mutation = useMutation(
     (userData) => {
-      return makeRequest.put("/users", userData);  // API call to update the user
+      return makeRequest.put("/user", userData);  // API call to update the user
     },
     {
       onSuccess: () => {

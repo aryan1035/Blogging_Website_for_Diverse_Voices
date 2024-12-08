@@ -15,13 +15,13 @@ export const getPosts = (req, res) => {
       userId !== "undefined"
         ? `SELECT DISTINCT p.*, u.id AS userId, u.name, u.profilePic 
            FROM posts AS p 
-           JOIN users AS u ON u.id = p.userId 
+           JOIN user AS u ON u.id = p.userId 
            WHERE p.userId = ? 
            ORDER BY p.createdAt DESC`
         : `SELECT DISTINCT p.*, u.id AS userId, u.name, u.profilePic 
            FROM posts AS p 
-           JOIN users AS u ON u.id = p.userId
-           LEFT JOIN followers AS r ON r.followedUserId = p.userId 
+           JOIN user AS u ON u.id = p.userId
+           LEFT JOIN follower AS r ON r.followedUserId = p.userId 
            WHERE r.followerUserId = ? OR p.userId = ? 
            ORDER BY p.createdAt DESC`;
 

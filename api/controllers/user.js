@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 // Get user profile by user ID
 export const getUser = (req, res) => {
   const userId = req.params.userId; // Extract user ID from request parameters
-  const q = "SELECT * FROM users WHERE id=?"; // Query to get user details by ID
+  const q = "SELECT * FROM user WHERE id=?"; // Query to get user details by ID
 
   db.query(q, [userId], (err, data) => {
     if (err) return res.status(500).json(err); // Handle database errors
@@ -21,7 +21,7 @@ export const updateUser = (req, res) => {
   jwt.verify(token, "secretkey", (err, userInfo) => {
     if (err) return res.status(403).json("Token is not valid!"); // If token is invalid, return error
 
-    const q = "UPDATE users SET `name`=?, `city`=?, `website`=?, `profilePic`=? WHERE id=?";
+    const q = "UPDATE user SET `name`=?, `city`=?, `website`=?, `profilePic`=? WHERE id=?";
     // Query to update user profile with new data
 
     db.query(
@@ -43,18 +43,18 @@ export const updateUser = (req, res) => {
 };
 
 // Search users by name
-export const searchUsers = (req, res) => {
+export const searchUser = (req, res) => {
   const { name } = req.query; // Get search query from URL parameter
   if (!name) {
     return res.status(400).json("Name query is required");
   }
 
-  const q = "SELECT * FROM users WHERE name LIKE ?"; // Query to search users by name
+  const q = "SELECT * FROM user WHERE name LIKE ?"; // Query to search users by name
   const searchQuery = `%${name}%`; // Use wildcards for partial matching
 
   db.query(q, [searchQuery], (err, data) => {
     if (err) return res.status(500).json(err); // Handle database errors
-    const users = data.map(({ password, ...user }) => user); // Exclude password from results
-    return res.json(users); // Send list of matching users
+    const user = data.map(({ password, ...user }) => user); // Exclude password from results
+    return res.json(user); // Send list of matching users
   });
 };

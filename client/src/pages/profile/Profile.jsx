@@ -21,17 +21,17 @@ const Profile = () => {
   // Fetch user data based on the userId from the URL
   const { isLoading, error, data, refetch } = useQuery(
     ["user", userId],
-    () => makeRequest.get("/users/find/" + userId).then((res) => res.data),
+    () => makeRequest.get("/user/find/" + userId).then((res) => res.data),
     {
       enabled: !!userId, // Only run the query if userId is available
     }
   );
 
   // Fetch relationship data based on userId
-  const { isLoading: rIsLoading, data: followersData } = useQuery(
-    ["followers", userId],
+  const { isLoading: rIsLoading, data: followerData } = useQuery(
+    ["follower", userId],
     () =>
-      makeRequest.get("/followers?followedUserId=" + userId).then((res) => res.data),
+      makeRequest.get("/follower?followedUserId=" + userId).then((res) => res.data),
     {
       enabled: !!userId, // Only run the query if userId is available
     }
@@ -41,19 +41,19 @@ const Profile = () => {
   const mutation = useMutation(
     (following) => {
       if (following)
-        return makeRequest.delete("/followers?userId=" + userId);
-      return makeRequest.post("/followers", { userId });
+        return makeRequest.delete("/follower?userId=" + userId);
+      return makeRequest.post("/follower", { userId });
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["followers"]);
+        queryClient.invalidateQueries(["follower"]);
         queryClient.invalidateQueries(["user"]);
       },
     }
   );
 
   const handleFollow = () => {
-    mutation.mutate(followersData.includes(currentUser.id));
+    mutation.mutate(followerData.includes(currentUser.id));
   };
 
   // Refetch data when userId changes (e.g., when navigating between profiles)
@@ -100,7 +100,7 @@ const Profile = () => {
               <button onClick={() => setOpenUpdate(true)}>Update</button>
             ) : (
               <button onClick={handleFollow}>
-                {followersData.includes(currentUser.id)
+                {followerData.includes(currentUser.id)
                   ? "Following"
                   : "Follow"}
               </button>

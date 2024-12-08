@@ -3,8 +3,8 @@ import jwt from "jsonwebtoken";
 import moment from "moment";
 
 export const getComments = (req, res) => {
-  const q = `SELECT c.*, u.id AS userId, name, profilePic FROM comments AS c 
-             JOIN users AS u ON (u.id = c.userId)
+  const q = `SELECT c.*, u.id AS userId, name, profilePic FROM comment AS c 
+             JOIN user AS u ON (u.id = c.userId)
              WHERE c.postId = ? ORDER BY c.createdAt DESC`;
   
   db.query(q, [req.query.postId], (err, data) => {
@@ -20,7 +20,7 @@ export const addComment = (req, res) => {
   jwt.verify(token, "secretkey", (err, userInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
 
-    const q = "INSERT INTO comments(`desc`, `createdAt`, `userId`, `postId`) VALUES (?)";
+    const q = "INSERT INTO comment(`desc`, `createdAt`, `userId`, `postId`) VALUES (?)";
     const values = [
       req.body.desc,
       moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
@@ -45,11 +45,11 @@ export const deleteComment = (req, res) => {
     const commentId = req.params.id;
 
     // SQL query to delete the comment only if the current user owns it
-    const q = "DELETE FROM comments WHERE `id` = ? AND `userId` = ?";
+    const q = "DELETE FROM comment WHERE `id` = ? AND `userId` = ?";
     
     db.query(q, [commentId, userInfo.id], (err, data) => {
       if (err) return res.status(500).json(err);
-      if (data.affectedRows === 0) return res.status(403).json("You can only delete your own comments!");
+      if (data.affectedRows === 0) return res.status(403).json("You can only delete your own comment!");
 
       return res.status(200).json("Comment has been deleted.");
     });

@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 // Register new user
 export const register = (req, res) => {
-  const q = "SELECT * FROM users WHERE username = ?";
+  const q = "SELECT * FROM user WHERE username = ?";
 
   db.query(q, [req.body.username], (err, data) => {
     if (err) return res.status(500).json(err); // Handle DB errors
@@ -14,7 +14,7 @@ export const register = (req, res) => {
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(req.body.password, salt);
 
-    const q = "INSERT INTO users (`name`,`username`,`email`,`password`) VALUE (?)";
+    const q = "INSERT INTO user (`name`,`username`,`email`,`password`) VALUE (?)";
     const values = [req.body.name, req.body.username, req.body.email, hashedPassword];
 
     // Insert new user into the database
@@ -27,7 +27,7 @@ export const register = (req, res) => {
 
 // Login user
 export const login = (req, res) => {
-  const q = "SELECT * FROM users WHERE username = ?";
+  const q = "SELECT * FROM user WHERE username = ?";
 
   db.query(q, [req.body.username], (err, data) => {
     if (err) return res.status(500).json(err); // Handle DB errors

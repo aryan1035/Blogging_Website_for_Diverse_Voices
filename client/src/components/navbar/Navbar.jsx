@@ -38,7 +38,7 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
   const handleSearch = async () => {
     if (searchQuery.trim()) {
       try {
-        const res = await makeRequest.get(`/users/search?name=${searchQuery}`);
+        const res = await makeRequest.get(`/user/search?name=${searchQuery}`);
         setSearchResults(res.data);
         setNoResults(res.data.length === 0); // Check if no results were found
       } catch (err) {
@@ -92,7 +92,7 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
           <SearchOutlinedIcon />
           <input
             type="text"
-            placeholder="Search for users..."
+            placeholder="Search for user..."
             value={searchQuery}
             onChange={handleSearchChange}
             onKeyUp={(e) => {
@@ -121,7 +121,7 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
               ))}
             </div>
           )}
-          {noResults && <div className="no-results">No users found.</div>}
+          {noResults && <div className="no-results">No user found.</div>}
         </div>
       </div>
 

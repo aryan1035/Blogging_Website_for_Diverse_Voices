@@ -6,7 +6,7 @@ import moment from "moment";
 export const getReplies = (req, res) => {
   const q = `SELECT r.*, u.id AS userId, name, profilePic 
              FROM reply AS r
-             JOIN users AS u ON (u.id = r.userId)
+             JOIN user AS u ON (u.id = r.userId)
              WHERE r.commentId = ? ORDER BY r.createdAt DESC`;
 
   db.query(q, [req.query.commentId], (err, data) => {

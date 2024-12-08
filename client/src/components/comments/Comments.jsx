@@ -13,26 +13,26 @@ const Comments = ({ postId }) => {
   const { currentUser } = useContext(AuthContext);
 
   // Fetch comments for the post
-  const { isLoading, error, data } = useQuery(["comments", postId], () =>
-    makeRequest.get("/comments?postId=" + postId).then((res) => res.data)
+  const { isLoading, error, data } = useQuery(["comment", postId], () =>
+    makeRequest.get("/comment?postId=" + postId).then((res) => res.data)
   );
 
   // Mutation for adding a comment
   const commentMutation = useMutation(
-    (newComment) => makeRequest.post("/comments", newComment),
+    (newComment) => makeRequest.post("/comment", newComment),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["comments", postId]);
+        queryClient.invalidateQueries(["comment", postId]);
       },
     }
   );
 
   // Mutation for deleting a comment
   const deleteCommentMutation = useMutation(
-    (commentId) => makeRequest.delete(`/comments/${commentId}`),
+    (commentId) => makeRequest.delete(`/comment/${commentId}`),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["comments", postId]);
+        queryClient.invalidateQueries(["comment", postId]);
       },
     }
   );
@@ -73,11 +73,11 @@ const Comments = ({ postId }) => {
     deleteCommentMutation.mutate(commentId);
   };
 
-  if (isLoading) return <div>Loading comments...</div>;
+  if (isLoading) return <div>Loading comment...</div>;
   if (error) return <div>Something went wrong!</div>;
 
   return (
-    <div className="comments">
+    <div className="comment">
       <form onSubmit={handleCommentSubmit}>
         <input type="text" placeholder="Write a comment..." />
         <button type="submit">Send</button>
